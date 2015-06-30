@@ -2,7 +2,7 @@
 #-
 #
 # Copyright (c) 2014 Chris Price <chris@chrisprice.co>
-# Copyright (c) 2014, Jonathan Price <jonathan@jonathanprice.uk>
+# Copyright (c) 2014 Jonathan Price <jonathan@jonathanprice.uk>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
