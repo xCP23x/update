@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# update.sh
 # Updates all packages using pkgng, then updates ports to newest versions
 # Any locked packages are unlocked, upgraded from ports, then relocked
 # Automatically creates and manages ZFS snapshots
@@ -9,7 +8,7 @@
 # Comments, suggestions, bug reports please to:
 # Chris Price <chris@chrisprice.co>
 #
-# NOTE: REQUIRES PORTUPGRADE TO BE INSTALLED
+# NOTE: REQUIRES sysutils/portupgrade TO BE INSTALLED
 
 
 ##################################################################
