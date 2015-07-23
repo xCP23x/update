@@ -70,7 +70,7 @@ getSnapDate() {
     SNAPTIME=$(echo "$1" | cut -d - -f 5)
 
     # Iterate over possible valid prefixes
-    for i in ${ZFS[@]}; do
+    for i in "${ZFS[@]}"; do
         if [ "${SNAPPREFIX}" == "$i@UPDATE" ]; then
             if [[ "${SNAPYEAR}" && "${SNAPMONTH}" && "${SNAPDAY}" && "${SNAPTIME}" ]]; then
                 # Approximate a 30-day month and 365-day year
@@ -87,7 +87,7 @@ getSnapDate() {
 
 # Converts bytes to a human readable format
 humanReadable() {
-    HUMAN=$(echo $1 | awk '{ split( "B KiB MiB GiB TiB PiB EiB ZiB YiB", s ); n=1; while( $1>1024 ){ $1/=1024; n++ } printf "%.2f %s", $1, s[n] }')
+    HUMAN=$(echo "$1" | awk '{ split( "B KiB MiB GiB TiB PiB EiB ZiB YiB", s ); n=1; while( $1>1024 ){ $1/=1024; n++ } printf "%.2f %s", $1, s[n] }')
 }
 
 
@@ -112,7 +112,7 @@ deleteSnaps() {
     # Iterate over all snapshots
     # We're using process substitution to avoid subshell problems
     /sbin/zfs list -Ht snapshot | cut -f 1 | {
-        while read s; do
+        while read -r s; do
             KEEPSNAP="NO"
             getSnapDate "$s"
 
@@ -122,17 +122,17 @@ deleteSnaps() {
                 if [[ ${SNAPAGE} -gt ${MAXAGE} ]]; then
                     # Delete it - leave KEEPSNAP="NO"
                     NDELETED=$(( 10#${NDELETED} + 1 ))
-                    SPACEFREED=$(( 10#${SPACEFREED} + $(/sbin/zfs list -Hpt snapshot | grep $s | cut -f 2) ))
+                    SPACEFREED=$(( 10#${SPACEFREED} + $(/sbin/zfs list -Hpt snapshot | grep "$s" | cut -f 2) ))
                 else
                     # Mark it to be kept
                     KEEPSNAP="YES"
                     NKEPT=$(( 10#${NKEPT} + 1 ))
-                    SPACEUSED=$(( 10#${SPACEUSED} + $(/sbin/zfs list -Hpt snapshot | grep $s | cut -f 2) ))
+                    SPACEUSED=$(( 10#${SPACEUSED} + $(/sbin/zfs list -Hpt snapshot | grep "$s" | cut -f 2) ))
                 fi
 
                 if [ ${KEEPSNAP} == "NO" ]; then
                     # Actually delete it
-                    /sbin/zfs destroy $s
+                    /sbin/zfs destroy "$s"
                 fi
             fi
         done
@@ -146,8 +146,8 @@ deleteSnaps() {
 
 # Function to relock packages
 lock() {
-    for i in ${LOCKED[@]}; do
-        /usr/sbin/pkg lock -y $i
+    for i in "${LOCKED[@]}"; do
+        /usr/sbin/pkg lock -y "$i"
     done
 }
 
@@ -157,8 +157,8 @@ lock() {
 # Create a ZFS snapshot
 echo "Creating ZFS snapshots"
 SNAPSHOTDATE=$(date -u +%Y-%m-%d-%H%M)
-for i in ${ZFS[@]}; do
-    /sbin/zfs snapshot $i@UPDATE-${SNAPSHOTDATE}
+for i in "${ZFS[@]}"; do
+    /sbin/zfs snapshot "$i"@UPDATE-"${SNAPSHOTDATE}"
 done
 
 # Delete old snapshots
@@ -174,7 +174,7 @@ if [ -f "locked.packages" ]; then
 else
     # Put locked packages in $LOCKED, write to file in case of ctrl-c
     LOCKED=$(/usr/sbin/pkg query -e '%k=1' %n)
-    echo ${LOCKED[@]} > locked.packages
+    echo "${LOCKED[@]}" > locked.packages
 fi
 
 
@@ -184,7 +184,7 @@ fi
 # Unlock all packages and update ports
 /usr/sbin/pkg unlock -aqy
 /usr/sbin/portsnap fetch update
-/usr/local/sbin/portupgrade -i ${LOCKED[@]}
+/usr/local/sbin/portupgrade -i "${LOCKED[@]}"
 
 # Relock packages
 lock
