@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
 # update.sh
 # Updates all packages using pkgng, then updates ports to newest versions
