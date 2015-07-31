@@ -118,7 +118,7 @@ deleteSnaps() {
 
 # Function to relock packages
 lock() {
-    for i in "${LOCKED[@]}"; do
+    for i in ${LOCKED[@]}; do
         /usr/sbin/pkg lock -y "$i"
     done
 }
