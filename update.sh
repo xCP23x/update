@@ -158,6 +158,12 @@ fi
 /usr/sbin/portsnap fetch update
 /usr/local/sbin/portupgrade -i "${LOCKED[@]}"
 
+
+echo -e "\nUpgrading VULNERABLE ports..."
+# Upgrade vulnerable ports
+VULNERABLE=($(/usr/sbin/pkg audit -q))
+/usr/local/sbin/portupgrade -i "${VULNERABLE[@]}"
+
 # Relock packages
 lock
 rm locked.packages
