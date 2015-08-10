@@ -23,3 +23,5 @@ This script assumes that any unlocked packages can be safely upgraded via pkgng,
 This allows custom compile options to be maintained whilst still allowing automatic updating.
 
 A temporary file (locked.packages) is created during this process - if the script is interrupted (for example ^C), it will automatically relock all packages before continuing. This file is deleted upon completion.
+
+Any vulnerable packages (from `pkg audit`) will also be upgraded via ports if no pkgng upgrade is available.
