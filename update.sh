@@ -159,10 +159,13 @@ fi
 /usr/local/sbin/portupgrade -i "${LOCKED[@]}"
 
 
-echo -e "\nUpgrading VULNERABLE ports..."
-# Upgrade vulnerable ports
+# Check for vulnerable ports
 VULNERABLE=($(/usr/sbin/pkg audit -q))
-/usr/local/sbin/portupgrade -i "${VULNERABLE[@]}"
+if [ ${#VULNERABLE[@]} -ne 0 ]; then
+    echo -e "\nUpgrading VULNERABLE ports..."
+    /usr/local/sbin/portupgrade -i "${VULNERABLE[@]}"
+fi
+
 
 # Relock packages
 lock
