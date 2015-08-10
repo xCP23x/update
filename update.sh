@@ -124,7 +124,7 @@ lock() {
 }
 
 
-# START OF SCRIPT
+### START OF SCRIPT ###
 
 # Create a ZFS snapshot
 echo "Creating ZFS snapshots"
