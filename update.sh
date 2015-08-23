@@ -174,3 +174,10 @@ rm locked.packages
 
 # Fetch updates for FreeBSD
 /usr/sbin/freebsd-update fetch
+
+
+# Inform user about remaining vulnerable ports
+VULNERABLE=($(/usr/sbin/pkg audit -q))
+if [ ${#VULNERABLE[@]} -ne 0 ]; then
+    /usr/sbin/pkg audit
+fi
