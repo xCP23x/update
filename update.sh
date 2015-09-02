@@ -156,14 +156,14 @@ fi
 # Unlock all packages and update ports
 /usr/sbin/pkg unlock -aqy
 /usr/sbin/portsnap fetch update
-/usr/local/sbin/portupgrade -i "${LOCKED[@]}"
+/usr/local/sbin/portupgrade -i ${LOCKED[@]}
 
 
 # Check for vulnerable ports
 VULNERABLE=($(/usr/sbin/pkg audit -q))
 if [ ${#VULNERABLE[@]} -ne 0 ]; then
     echo -e "\nUpgrading VULNERABLE ports..."
-    /usr/local/sbin/portupgrade -i "${VULNERABLE[@]}"
+    /usr/local/sbin/portupgrade -i ${VULNERABLE[@]}
 fi
 
 
